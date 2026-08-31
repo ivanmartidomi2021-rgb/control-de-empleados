@@ -1105,4 +1105,1613 @@
                     <span style="font-weight:600;">💡 Mensajes inteligentes</span>
                     <span class="text-muted" style="font-size:0.75rem;" id="dashMessageTime"></span>
                 </div>
-                <div id="dashMessages" style="margin-top:8px; font-size:0.95rem; color:var
+                <div id="dashMessages" style="margin-top:8px; font-size:0.95rem; color:var(--text2);">
+                    Cargando información...
+                </div>
+            </div>
+
+            <!-- Gráficos rápidos en dashboard -->
+            <div class="charts-grid mt-16">
+                <div class="chart-box"><h3>📊 Gastos por semana</h3><canvas id="dashChart1"></canvas></div>
+                <div class="chart-box"><h3>🧑‍💼 Empleados con mayor costo</h3><canvas id="dashChart2"></canvas></div>
+            </div>
+        </section>
+
+        <!-- ===== EMPLEADOS ===== -->
+        <section id="section-employees" class="section">
+            <div class="flex-between mb-16">
+                <div>
+                    <input type="text" id="searchEmployee" placeholder="🔎 Buscar empleado..." style="padding:8px 16px;border-radius:30px;border:1px solid var(--border);background:var(--bg2);color:var(--text);width:240px;max-width:100%;" />
+                </div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                    <button class="filter-btn active" data-filter="all">Todos</button>
+                    <button class="filter-btn" data-filter="active">Activos</button>
+                    <button class="filter-btn" data-filter="inactive">Inactivos</button>
+                    <button class="filter-btn" data-filter="debt">Con deuda</button>
+                </div>
+            </div>
+            <div class="employees-grid" id="employeesGrid"></div>
+        </section>
+
+        <!-- ===== SEMANA ===== -->
+        <section id="section-week" class="section">
+            <div class="week-nav">
+                <button id="weekPrev">←</button>
+                <span class="week-label" id="weekLabel">Semana actual</span>
+                <button id="weekNext">→</button>
+                <button id="weekToday">Hoy</button>
+                <button id="copyWeekBtn" style="background:var(--bg3);">📋 Copiar semana anterior</button>
+                <button id="markAllComplete" style="background:var(--bg3);">✅ Marcar todos completo</button>
+            </div>
+            <div class="table-wrap">
+                <table id="weekTable">
+                    <thead>
+                        <tr>
+                            <th>Empleado</th>
+                            <th>Lun</th>
+                            <th>Mar</th>
+                            <th>Mié</th>
+                            <th>Jue</th>
+                            <th>Vie</th>
+                            <th>Sáb</th>
+                            <th style="text-align:right;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="weekBody"></tbody>
+                </table>
+            </div>
+            <div class="quick-actions">
+                <button id="addEmployeeQuick">➕ Agregar empleado</button>
+                <button id="refreshWeek">🔄 Refrescar</button>
+            </div>
+        </section>
+
+        <!-- ===== PAGOS ===== -->
+        <section id="section-payments" class="section">
+            <h2 style="margin-bottom:12px;">💵 Registro de Pagos</h2>
+            <div class="card" style="margin-bottom:16px;padding:16px 20px;">
+                <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:end;">
+                    <div style="flex:1;min-width:150px;">
+                        <label style="font-size:0.75rem;color:var(--text3);">Empleado</label>
+                        <select id="paymentEmployee" style="width:100%;padding:8px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg2);color:var(--text);"></select>
+                    </div>
+                    <div style="flex:1;min-width:120px;">
+                        <label style="font-size:0.75rem;color:var(--text3);">Cantidad ($)</label>
+                        <input type="number" id="paymentAmount" value="0" step="0.01" min="0" style="width:100%;padding:8px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg2);color:var(--text);" />
+                    </div>
+                    <div style="flex:1;min-width:120px;">
+                        <label style="font-size:0.75rem;color:var(--text3);">Concepto</label>
+                        <select id="paymentConcept" style="width:100%;padding:8px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg2);color:var(--text);">
+                            <option value="Pago semanal">Pago semanal</option>
+                            <option value="Adelanto">Adelanto</option>
+                            <option value="Bonificación">Bonificación</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                    <div style="flex:1;min-width:100px;">
+                        <label style="font-size:0.75rem;color:var(--text3);">Fecha</label>
+                        <input type="date" id="paymentDate" style="width:100%;padding:8px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg2);color:var(--text);" />
+                    </div>
+                    <button id="registerPaymentBtn" class="btn-primary" style="padding:8px 24px;border-radius:var(--radius-sm);border:none;font-weight:600;cursor:pointer;background:var(--primary);color:#fff;height:42px;">💰 Registrar</button>
+                </div>
+                <div style="margin-top:8px;">
+                    <label style="font-size:0.75rem;color:var(--text3);">Notas (opcional)</label>
+                    <input type="text" id="paymentNote" placeholder="Nota..." style="width:100%;padding:6px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg2);color:var(--text);" />
+                </div>
+            </div>
+            <div id="paymentHistoryList" style="margin-top:12px;"></div>
+        </section>
+
+        <!-- ===== ESTADÍSTICAS ===== -->
+        <section id="section-stats" class="section">
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
+                <button class="filter-btn active" data-stats="week">Esta semana</button>
+                <button class="filter-btn" data-stats="month">Este mes</button>
+                <button class="filter-btn" data-stats="quarter">Últimos 3 meses</button>
+                <button class="filter-btn" data-stats="year">Este año</button>
+            </div>
+            <div class="charts-grid">
+                <div class="chart-box"><h3>📊 Gastos por semana</h3><canvas id="statsChart1"></canvas></div>
+                <div class="chart-box"><h3>🧑‍💼 Empleados con mayor costo</h3><canvas id="statsChart2"></canvas></div>
+                <div class="chart-box"><h3>⏱️ Horas trabajadas</h3><canvas id="statsChart3"></canvas></div>
+                <div class="chart-box"><h3>🔄 Pagado vs Pendiente</h3><canvas id="statsChart4"></canvas></div>
+                <div class="chart-box" style="grid-column:1/-1;"><h3>📈 Evolución mensual</h3><canvas id="statsChart5"></canvas></div>
+            </div>
+        </section>
+
+        <!-- ===== HISTORIAL ===== -->
+        <section id="section-history" class="section">
+            <div class="flex-between mb-16">
+                <h2>📚 Historial de semanas</h2>
+                <div style="display:flex;gap:8px;">
+                    <button id="exportJSON" style="background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:6px 16px;border-radius:30px;cursor:pointer;">💾 Exportar JSON</button>
+                    <button id="importJSON" style="background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:6px 16px;border-radius:30px;cursor:pointer;">📥 Importar JSON</button>
+                    <input type="file" id="importFile" accept=".json" style="display:none;" />
+                </div>
+            </div>
+            <div id="historyList"></div>
+        </section>
+
+        <!-- ===== CONFIGURACIÓN ===== -->
+        <section id="section-config" class="section">
+            <h2 style="margin-bottom:16px;">⚙️ Configuración</h2>
+            <div class="config-group">
+                <h3>💼 Negocio</h3>
+                <div class="row">
+                    <label>Nombre: <input type="text" id="configBusinessName" placeholder="Mi negocio" /></label>
+                    <label>Admin: <input type="text" id="configAdminName" placeholder="Administrador" /></label>
+                    <label>Moneda: <input type="text" id="configCurrency" value="$" style="width:60px;" /></label>
+                </div>
+            </div>
+            <div class="config-group">
+                <h3>📅 Semana</h3>
+                <div class="row">
+                    <label>Inicio: <input type="text" id="configWeekStart" value="Lunes" style="width:100px;" /></label>
+                    <label>Fin: <input type="text" id="configWeekEnd" value="Sábado" style="width:100px;" /></label>
+                    <label><input type="checkbox" id="configSunday" /> Incluir Domingo</label>
+                </div>
+            </div>
+            <div class="config-group">
+                <h3>🔐 PIN de seguridad</h3>
+                <div class="row">
+                    <label>PIN (4-6 dígitos): <input type="password" id="configPin" placeholder="0000" maxlength="6" style="width:100px;" /></label>
+                    <button id="saveConfigBtn" class="btn-primary" style="padding:6px 20px;border-radius:30px;border:none;background:var(--primary);color:#fff;cursor:pointer;">💾 Guardar</button>
+                </div>
+            </div>
+            <div class="config-group">
+                <h3>💾 Copia de seguridad</h3>
+                <div class="row">
+                    <button id="backupExport" style="background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:6px 20px;border-radius:30px;cursor:pointer;">📤 Exportar respaldo</button>
+                    <button id="backupImport" style="background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:6px 20px;border-radius:30px;cursor:pointer;">📥 Importar respaldo</button>
+                    <input type="file" id="backupFile" accept=".json" style="display:none;" />
+                </div>
+            </div>
+            <div class="config-group">
+                <h3>📄 Exportar Reportes</h3>
+                <div class="row">
+                    <button id="exportPDF" style="background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:6px 20px;border-radius:30px;cursor:pointer;">📄 Exportar PDF</button>
+                    <button id="exportExcel" style="background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:6px 20px;border-radius:30px;cursor:pointer;">📊 Exportar Excel</button>
+                    <button id="exportCSV" style="background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:6px 20px;border-radius:30px;cursor:pointer;">📋 Exportar CSV</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ===== MODAL ===== -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="modalContent">
+            <h2><span id="modalTitle">Modal</span><button class="close-btn" id="modalClose">✕</button></h2>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- ===== TOAST CONTAINER ===== -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ============================================================
+    JAVASCRIPT COMPLETO
+    ============================================================ -->
+    <script>
+        // ================================================================
+        // 1.  ESTADO GLOBAL
+        // ================================================================
+        const STATE = {
+            employees: [],
+            weeks: {}, // key: "YYYY-MM-DD" (lunes) -> { employeeId: { mon:{...}, tue:{...}, ... } }
+            payments: [], // { employeeId, amount, date, concept, note, weekKey }
+            history: [], // { weekKey, data: {...} }
+            config: {
+                businessName: 'Mi Negocio',
+                adminName: 'Administrador',
+                currency: '$',
+                weekStart: 'Lunes',
+                weekEnd: 'Sábado',
+                includeSunday: false,
+                pin: '',
+                theme: 'dark'
+            },
+            currentWeekKey: null,
+            currentEmployeeId: null,
+            charts: {},
+            filter: 'all',
+            statsFilter: 'week',
+            searchQuery: '',
+        };
+
+        // Días de la semana (0 = domingo)
+        const DAYS = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'];
+        const DAYS_SHORT = ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'];
+        const DAYS_INDEX = { lun: 1, mar: 2, mié: 3, jue: 4, vie: 5, sáb: 6, dom: 0 };
+
+        // ================================================================
+        // 2.  PERSISTENCIA (IndexedDB / LocalStorage)
+        // ================================================================
+        function saveState() {
+            try {
+                const data = {
+                    employees: STATE.employees,
+                    weeks: STATE.weeks,
+                    payments: STATE.payments,
+                    history: STATE.history,
+                    config: STATE.config,
+                };
+                localStorage.setItem('ivan_control_data', JSON.stringify(data));
+            } catch (e) { console.warn('Save error', e); }
+        }
+
+        function loadState() {
+            try {
+                const raw = localStorage.getItem('ivan_control_data');
+                if (raw) {
+                    const data = JSON.parse(raw);
+                    STATE.employees = data.employees || [];
+                    STATE.weeks = data.weeks || {};
+                    STATE.payments = data.payments || [];
+                    STATE.history = data.history || [];
+                    STATE.config = { ...STATE.config, ...(data.config || {}) };
+                }
+            } catch (e) { console.warn('Load error', e); }
+        }
+
+        // ================================================================
+        // 3.  EMPLEADOS INICIALES
+        // ================================================================
+        const DEFAULT_EMPLOYEES = [
+            { id: 'emp1', name: 'Darwin', role: 'Trabajador', phone: '', status: 'active', payDay: 35, payHalf: 17.5,
+                payHour: 5, notes: '', avatar: 'D' },
+            { id: 'emp2', name: 'Cristofer', role: 'Trabajador', phone: '', status: 'active', payDay: 30, payHalf: 15,
+                payHour: 4, notes: '', avatar: 'C' },
+            { id: 'emp3', name: 'Ivan', role: 'Administrador', phone: '', status: 'active', payDay: 40, payHalf: 20,
+                payHour: 5, notes: '', avatar: 'I' },
+            { id: 'emp4', name: 'Oseas', role: 'Trabajador', phone: '', status: 'active', payDay: 32, payHalf: 16,
+                payHour: 4.5, notes: '', avatar: 'O' },
+            { id: 'emp5', name: 'Erick', role: 'Trabajador', phone: '', status: 'active', payDay: 30, payHalf: 15,
+                payHour: 4, notes: '', avatar: 'E' },
+            { id: 'emp6', name: 'Dima', role: 'Trabajador', phone: '', status: 'active', payDay: 28, payHalf: 14,
+                payHour: 3.5, notes: '', avatar: 'D' },
+        ];
+
+        function initEmployees() {
+            if (STATE.employees.length === 0) {
+                STATE.employees = DEFAULT_EMPLOYEES.map(e => ({ ...e, id: e.id || 'emp_' + Date.now() + '_' + Math.random()
+                        .toString(36).slice(2, 6) }));
+                saveState();
+            }
+        }
+
+        // ================================================================
+        // 4.  FUNCIONES DE SEMANA
+        // ================================================================
+        function getWeekKey(date = new Date()) {
+            const d = new Date(date);
+            const day = d.getDay();
+            const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Lunes
+            const monday = new Date(d.setDate(diff));
+            monday.setHours(0, 0, 0, 0);
+            return monday.toISOString().split('T')[0];
+        }
+
+        function getWeekRange(weekKey) {
+            const start = new Date(weekKey + 'T00:00:00');
+            const end = new Date(start);
+            end.setDate(start.getDate() + 6);
+            return { start, end };
+        }
+
+        function getWeekLabel(weekKey) {
+            const { start, end } = getWeekRange(weekKey);
+            const opts = { day: 'numeric', month: 'short' };
+            return `${start.toLocaleDateString('es', opts)} → ${end.toLocaleDateString('es', opts)}`;
+        }
+
+        function getWeekDays(weekKey) {
+            const { start } = getWeekRange(weekKey);
+            const days = [];
+            for (let i = 0; i < 7; i++) {
+                const d = new Date(start);
+                d.setDate(start.getDate() + i);
+                days.push(d);
+            }
+            return days;
+        }
+
+        function getDayKey(date) {
+            return date.toISOString().split('T')[0];
+        }
+
+        function getEmployeeWeekData(employeeId, weekKey) {
+            if (!STATE.weeks[weekKey]) STATE.weeks[weekKey] = {};
+            if (!STATE.weeks[weekKey][employeeId]) {
+                STATE.weeks[weekKey][employeeId] = {};
+                const days = getWeekDays(weekKey);
+                days.forEach(d => {
+                    const dk = getDayKey(d);
+                    STATE.weeks[weekKey][employeeId][dk] = { type: 'off', hours: 0, amount: 0 };
+                });
+            }
+            return STATE.weeks[weekKey][employeeId];
+        }
+
+        function calculateDayAmount(employee, type, hours = 0) {
+            if (type === 'complete') return employee.payDay || 0;
+            if (type === 'half') return (employee.payDay || 0) / 2;
+            if (type === 'hours') return (employee.payHour || 0) * hours;
+            return 0;
+        }
+
+        function calculateWeekTotal(employeeId, weekKey) {
+            const emp = STATE.employees.find(e => e.id === employeeId);
+            if (!emp) return 0;
+            const data = getEmployeeWeekData(employeeId, weekKey);
+            let total = 0;
+            const days = getWeekDays(weekKey);
+            days.forEach(d => {
+                const dk = getDayKey(d);
+                if (data[dk]) {
+                    total += data[dk].amount || 0;
+                }
+            });
+            return total;
+        }
+
+        function getEmployeePayments(employeeId) {
+            return STATE.payments.filter(p => p.employeeId === employeeId);
+        }
+
+        function getEmployeePaid(employeeId) {
+            return getEmployeePayments(employeeId).reduce((sum, p) => sum + p.amount, 0);
+        }
+
+        function getEmployeePending(employeeId, weekKey) {
+            const earned = calculateWeekTotal(employeeId, weekKey);
+            const paid = getEmployeePaid(employeeId);
+            // También considerar pagos de semanas anteriores en el historial
+            // Para simplificar, usamos solo la semana actual
+            return earned - paid;
+        }
+
+        // ================================================================
+        // 5.  RENDERIZADO
+        // ================================================================
+
+        // 5.1 Dashboard
+        function renderDashboard() {
+            const active = STATE.employees.filter(e => e.status === 'active');
+            let totalPay = 0,
+                totalPaid = 0,
+                totalDays = 0,
+                totalHours = 0;
+
+            const weekKey = STATE.currentWeekKey || getWeekKey();
+            STATE.currentWeekKey = weekKey;
+
+            active.forEach(emp => {
+                const data = getEmployeeWeekData(emp.id, weekKey);
+                const days = getWeekDays(weekKey);
+                days.forEach(d => {
+                    const dk = getDayKey(d);
+                    if (data[dk] && data[dk].type !== 'off') {
+                        totalDays++;
+                        totalHours += data[dk].hours || 0;
+                    }
+                });
+                const total = calculateWeekTotal(emp.id, weekKey);
+                totalPay += total;
+                const paid = getEmployeePaid(emp.id);
+                totalPaid += paid;
+            });
+
+            const pending = totalPay - totalPaid;
+            const avg = active.length ? totalPay / active.length : 0;
+
+            document.getElementById('dashTotalPay').textContent = `$${totalPay.toFixed(2)}`;
+            document.getElementById('dashActive').textContent = active.length;
+            document.getElementById('dashDays').textContent = totalDays;
+            document.getElementById('dashHours').textContent = totalHours.toFixed(1);
+            document.getElementById('dashPaid').textContent = `$${totalPaid.toFixed(2)}`;
+            document.getElementById('dashPending').textContent = `$${pending.toFixed(2)}`;
+            document.getElementById('dashAvg').textContent = `$${avg.toFixed(2)}`;
+
+            // Mensajes
+            const msgs = [];
+            if (active.length > 0) msgs.push(`👥 Tienes ${active.length} empleados activos.`);
+            if (totalPay > 0) msgs.push(`💰 Debes pagar $${totalPay.toFixed(2)} esta semana.`);
+            if (pending > 0) msgs.push(`🔴 Hay $${pending.toFixed(2)} pendientes de pago.`);
+            if (totalDays > 0) msgs.push(`📅 Se han trabajado ${totalDays} días en total.`);
+            const topEmp = active.sort((a, b) => calculateWeekTotal(b.id, weekKey) - calculateWeekTotal(a.id, weekKey))[0];
+            if (topEmp && calculateWeekTotal(topEmp.id, weekKey) > 0) {
+                msgs.push(`🏆 ${topEmp.name} ha generado $${calculateWeekTotal(topEmp.id, weekKey).toFixed(2)}.`);
+            }
+            if (msgs.length === 0) msgs.push('📌 No hay datos esta semana. Comienza registrando jornadas.');
+            document.getElementById('dashMessages').innerHTML = msgs.map(m => `• ${m}`).join('<br />');
+            document.getElementById('dashMessageTime').textContent = `Actualizado: ${new Date().toLocaleTimeString()}`;
+
+            // Gráficos rápidos
+            renderDashCharts();
+        }
+
+        function renderDashCharts() {
+            const weekKey = STATE.currentWeekKey || getWeekKey();
+            const active = STATE.employees.filter(e => e.status === 'active');
+
+            // Chart 1: Gastos por semana (últimas 6 semanas)
+            const weeks = [];
+            const totals = [];
+            const d = new Date(weekKey);
+            for (let i = 5; i >= 0; i--) {
+                const wk = getWeekKey(new Date(d.getTime() - i * 7 * 24 * 60 * 60 * 1000));
+                weeks.push(getWeekLabel(wk));
+                let sum = 0;
+                active.forEach(emp => {
+                    sum += calculateWeekTotal(emp.id, wk);
+                });
+                totals.push(sum);
+            }
+            renderChart('dashChart1', weeks, totals, 'Gastos');
+
+            // Chart 2: Top empleados
+            const names = [];
+            const amounts = [];
+            const sorted = [...active].sort((a, b) => calculateWeekTotal(b.id, weekKey) - calculateWeekTotal(a.id, weekKey))
+                .slice(0, 6);
+            sorted.forEach(emp => {
+                names.push(emp.name);
+                amounts.push(calculateWeekTotal(emp.id, weekKey));
+            });
+            renderChart('dashChart2', names, amounts, 'Costo', true);
+        }
+
+        function renderChart(id, labels, data, label, horizontal = false) {
+            const canvas = document.getElementById(id);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            if (STATE.charts[id]) STATE.charts[id].destroy();
+
+            const isDark = document.documentElement.classList.contains('light-mode') ? false : true;
+            const color = isDark ? '#e8e8f0' : '#1a1a2e';
+            const bgColor = isDark ? 'rgba(79,140,255,0.2)' : 'rgba(79,140,255,0.15)';
+
+            STATE.charts[id] = new Chart(ctx, {
+                type: horizontal ? 'bar' : 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: label,
+                        data: data,
+                        backgroundColor: bgColor,
+                        borderColor: '#4f8cff',
+                        borderWidth: 2,
+                        borderRadius: 6,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { labels: { color: color, font: { size: 10 } } }
+                    },
+                    scales: {
+                        x: { ticks: { color: color, font: { size: 9 } }, grid: { color: isDark ? 'rgba(255,255,255,0.05)' :
+                                    'rgba(0,0,0,0.05)' } },
+                        y: { ticks: { color: color, font: { size: 9 } }, grid: { color: isDark ? 'rgba(255,255,255,0.05)' :
+                                    'rgba(0,0,0,0.05)' } }
+                    }
+                }
+            });
+        }
+
+        // 5.2 Empleados
+        function renderEmployees() {
+            const grid = document.getElementById('employeesGrid');
+            const query = STATE.searchQuery.toLowerCase();
+            let list = STATE.employees;
+
+            if (STATE.filter === 'active') list = list.filter(e => e.status === 'active');
+            else if (STATE.filter === 'inactive') list = list.filter(e => e.status === 'inactive');
+            else if (STATE.filter === 'debt') {
+                const wk = STATE.currentWeekKey || getWeekKey();
+                list = list.filter(e => getEmployeePending(e.id, wk) > 0);
+            }
+
+            if (query) {
+                list = list.filter(e =>
+                    e.name.toLowerCase().includes(query) ||
+                    (e.role && e.role.toLowerCase().includes(query)) ||
+                    (e.phone && e.phone.includes(query))
+                );
+            }
+
+            if (list.length === 0) {
+                grid.innerHTML =
+                    `<div class="card" style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text3);">👀 No hay empleados que coincidan</div>`;
+                return;
+            }
+
+            grid.innerHTML = list.map(emp => {
+                const wk = STATE.currentWeekKey || getWeekKey();
+                const pending = getEmployeePending(emp.id, wk);
+                const paid = getEmployeePaid(emp.id);
+                const total = calculateWeekTotal(emp.id, wk);
+                return `
+                    <div class="employee-card" data-id="${emp.id}">
+                        <div class="name">${emp.avatar || '👤'} ${emp.name}</div>
+                        <div class="role">${emp.role || 'Sin cargo'} ${emp.phone ? '📞 '+emp.phone : ''}</div>
+                        <span class="status ${emp.status}">${emp.status === 'active' ? '🟢 Activo' : '🔴 Inactivo'}</span>
+                        <div style="font-size:0.8rem;color:var(--text2);margin-top:4px;">
+                            Semana: $${total.toFixed(2)} | Pagado: $${paid.toFixed(2)}
+                        </div>
+                        ${pending > 0 ? `<div class="debt">🔴 Pendiente: $${pending.toFixed(2)}</div>` : ''}
+                        <div style="margin-top:6px;display:flex;gap:4px;flex-wrap:wrap;">
+                            <button class="emp-action" data-action="view" data-id="${emp.id}" style="background:var(--bg3);border:none;color:var(--text);padding:2px 10px;border-radius:20px;font-size:0.7rem;cursor:pointer;">👁️ Ver</button>
+                            <button class="emp-action" data-action="edit" data-id="${emp.id}" style="background:var(--bg3);border:none;color:var(--text);padding:2px 10px;border-radius:20px;font-size:0.7rem;cursor:pointer;">✏️ Editar</button>
+                            <button class="emp-action" data-action="pay" data-id="${emp.id}" style="background:var(--bg3);border:none;color:var(--text);padding:2px 10px;border-radius:20px;font-size:0.7rem;cursor:pointer;">💵 Pago</button>
+                            <button class="emp-action" data-action="toggle" data-id="${emp.id}" style="background:var(--bg3);border:none;color:var(--text);padding:2px 10px;border-radius:20px;font-size:0.7rem;cursor:pointer;">${emp.status === 'active' ? '⏸️' : '▶️'}</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Eventos
+            document.querySelectorAll('.emp-action').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const action = btn.dataset.action;
+                    const id = btn.dataset.id;
+                    if (action === 'view') viewEmployee(id);
+                    else if (action === 'edit') editEmployee(id);
+                    else if (action === 'pay') openPaymentModal(id);
+                    else if (action === 'toggle') toggleEmployeeStatus(id);
+                });
+            });
+
+            document.querySelectorAll('.employee-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const id = card.dataset.id;
+                    viewEmployee(id);
+                });
+            });
+        }
+
+        // 5.3 Tabla Semanal
+        function renderWeek() {
+            const weekKey = STATE.currentWeekKey || getWeekKey();
+            STATE.currentWeekKey = weekKey;
+            document.getElementById('weekLabel').textContent = `📅 ${getWeekLabel(weekKey)}`;
+
+            const tbody = document.getElementById('weekBody');
+            const active = STATE.employees.filter(e => e.status === 'active');
+
+            if (active.length === 0) {
+                tbody.innerHTML =
+                    `<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--text3);">👥 No hay empleados activos. Agrega uno.</td></tr>`;
+                return;
+            }
+
+            const days = getWeekDays(weekKey);
+            const dayKeys = days.map(d => getDayKey(d));
+            const dayNames = days.map(d => DAYS_SHORT[d.getDay()]);
+
+            let html = '';
+            active.forEach(emp => {
+                const data = getEmployeeWeekData(emp.id, weekKey);
+                let total = 0;
+                let dayCells = dayKeys.map(dk => {
+                    const entry = data[dk] || { type: 'off', hours: 0, amount: 0 };
+                    total += entry.amount || 0;
+                    const icon = entry.type === 'complete' ? '🟢' :
+                        entry.type === 'half' ? '🟡' :
+                        entry.type === 'hours' ? `🔵${entry.hours}h` :
+                        '❌';
+                    const cls = entry.type === 'complete' ? 'complete' :
+                        entry.type === 'half' ? 'half' :
+                        entry.type === 'hours' ? 'hours' : 'off';
+                    return `<td><span class="day-cell ${cls}" data-emp="${emp.id}" data-day="${dk}">${icon}</span></td>`;
+                });
+
+                html += `
+                    <tr>
+                        <td class="employee-name" data-emp="${emp.id}">
+                            <span class="avatar">${emp.avatar || '👤'}</span>
+                            ${emp.name}
+                        </td>
+                        ${dayCells.join('')}
+                        <td class="total-col">$${total.toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+
+            // Eventos de clic en celdas
+            document.querySelectorAll('.day-cell').forEach(cell => {
+                cell.addEventListener('click', () => {
+                    const empId = cell.dataset.emp;
+                    const dayKey = cell.dataset.day;
+                    openDayModal(empId, dayKey);
+                });
+            });
+
+            // Clic en nombre para ver perfil
+            document.querySelectorAll('.employee-name').forEach(el => {
+                el.addEventListener('click', () => {
+                    const empId = el.dataset.emp;
+                    if (empId) viewEmployee(empId);
+                });
+            });
+
+            updatePaymentsSelect();
+        }
+
+        // 5.4 Pagos
+        function renderPayments() {
+            updatePaymentsSelect();
+            renderPaymentHistory();
+        }
+
+        function updatePaymentsSelect() {
+            const sel = document.getElementById('paymentEmployee');
+            const current = sel.value;
+            sel.innerHTML = STATE.employees.filter(e => e.status === 'active').map(e =>
+                `<option value="${e.id}">${e.name}</option>`
+            ).join('');
+            if (current) sel.value = current;
+            // Fecha por defecto
+            document.getElementById('paymentDate').value = new Date().toISOString().split('T')[0];
+        }
+
+        function renderPaymentHistory() {
+            const container = document.getElementById('paymentHistoryList');
+            const wk = STATE.currentWeekKey || getWeekKey();
+            const payments = STATE.payments.filter(p => p.weekKey === wk || !p.weekKey);
+            if (payments.length === 0) {
+                container.innerHTML = `<div class="text-muted" style="padding:12px;">No hay pagos registrados esta semana.</div>`;
+                return;
+            }
+            container.innerHTML = payments.map(p => {
+                const emp = STATE.employees.find(e => e.id === p.employeeId);
+                return `
+                    <div class="history-item">
+                        <div><strong>${emp ? emp.name : 'Desconocido'}</strong> — ${p.concept || 'Pago'}</div>
+                        <div class="totals">
+                            <span>${p.date || ''}</span>
+                            <strong>${STATE.config.currency}${p.amount.toFixed(2)}</strong>
+                            ${p.note ? `<span class="text-muted">📝 ${p.note}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 5.5 Historial
+        function renderHistory() {
+            const container = document.getElementById('historyList');
+            if (STATE.history.length === 0) {
+                container.innerHTML = `<div class="text-muted" style="padding:20px;">No hay semanas cerradas aún.</div>`;
+                return;
+            }
+            container.innerHTML = [...STATE.history].reverse().map(h => {
+                const total = h.data?.totalPay || 0;
+                const paid = h.data?.totalPaid || 0;
+                const pending = h.data?.pending || 0;
+                return `
+                    <div class="history-item">
+                        <div>
+                            <div class="week-label">📅 ${getWeekLabel(h.weekKey)}</div>
+                            <div style="font-size:0.8rem;color:var(--text2);">${h.data?.employees || 0} empleados</div>
+                        </div>
+                        <div class="totals">
+                            <span>💰 <strong>${STATE.config.currency}${total.toFixed(2)}</strong></span>
+                            <span>💵 Pagado: <strong>${STATE.config.currency}${paid.toFixed(2)}</strong></span>
+                            <span>🔴 Pendiente: <strong>${STATE.config.currency}${pending.toFixed(2)}</strong></span>
+                            <button class="history-detail" data-week="${h.weekKey}" style="background:var(--bg3);border:none;color:var(--text);padding:4px 14px;border-radius:20px;cursor:pointer;">Ver detalles</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.querySelectorAll('.history-detail').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const weekKey = btn.dataset.week;
+                    viewHistoryDetail(weekKey);
+                });
+            });
+        }
+
+        // 5.6 Estadísticas
+        function renderStats() {
+            const filter = STATE.statsFilter;
+            const weekKey = STATE.currentWeekKey || getWeekKey();
+            let weeks = [];
+            let count = filter === 'week' ? 1 : filter === 'month' ? 4 : filter === 'quarter' ? 12 : 52;
+
+            const d = new Date(weekKey);
+            for (let i = count - 1; i >= 0; i--) {
+                const wk = getWeekKey(new Date(d.getTime() - i * 7 * 24 * 60 * 60 * 1000));
+                weeks.push(wk);
+            }
+
+            const active = STATE.employees.filter(e => e.status === 'active');
+            const weekLabels = weeks.map(w => getWeekLabel(w));
+
+            // Chart 1: Gastos por semana
+            const totals = weeks.map(w => {
+                let sum = 0;
+                active.forEach(emp => sum += calculateWeekTotal(emp.id, w));
+                return sum;
+            });
+            renderChart('statsChart1', weekLabels, totals, 'Gastos');
+
+            // Chart 2: Top empleados
+            const top = [...active].sort((a, b) => {
+                let sumA = 0,
+                    sumB = 0;
+                weeks.forEach(w => { sumA += calculateWeekTotal(a.id, w);
+                    sumB += calculateWeekTotal(b.id, w); });
+                return sumB - sumA;
+            }).slice(0, 6);
+            const topNames = top.map(e => e.name);
+            const topAmounts = top.map(e => {
+                let sum = 0;
+                weeks.forEach(w => sum += calculateWeekTotal(e.id, w));
+                return sum;
+            });
+            renderChart('statsChart2', topNames, topAmounts, 'Costo total', true);
+
+            // Chart 3: Horas trabajadas
+            const hoursData = weeks.map(w => {
+                let sum = 0;
+                active.forEach(emp => {
+                    const data = getEmployeeWeekData(emp.id, w);
+                    const days = getWeekDays(w);
+                    days.forEach(d => {
+                        const dk = getDayKey(d);
+                        if (data[dk]) sum += data[dk].hours || 0;
+                    });
+                });
+                return sum;
+            });
+            renderChart('statsChart3', weekLabels, hoursData, 'Horas');
+
+            // Chart 4: Pagado vs Pendiente (semana actual)
+            let paidTotal = 0,
+                pendingTotal = 0;
+            active.forEach(emp => {
+                const total = calculateWeekTotal(emp.id, weekKey);
+                const paid = getEmployeePaid(emp.id);
+                paidTotal += paid;
+                pendingTotal += (total - paid);
+            });
+            const ctx4 = document.getElementById('statsChart4').getContext('2d');
+            if (STATE.charts['statsChart4']) STATE.charts['statsChart4'].destroy();
+            const isDark4 = document.documentElement.classList.contains('light-mode') ? false : true;
+            const color4 = isDark4 ? '#e8e8f0' : '#1a1a2e';
+            STATE.charts['statsChart4'] = new Chart(ctx4, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Pagado', 'Pendiente'],
+                    datasets: [{
+                        data: [Math.max(0, paidTotal), Math.max(0, pendingTotal)],
+                        backgroundColor: ['#2ecc71', '#e74c3c'],
+                        borderColor: isDark4 ? '#0a0a0f' : '#f0f2f8',
+                        borderWidth: 2,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { labels: { color: color4, font: { size: 11 } } }
+                    }
+                }
+            });
+
+            // Chart 5: Evolución mensual (suma por mes)
+            const monthMap = {};
+            weeks.forEach(w => {
+                const { start } = getWeekRange(w);
+                const key = start.toISOString().slice(0, 7);
+                if (!monthMap[key]) monthMap[key] = 0;
+                let sum = 0;
+                active.forEach(emp => sum += calculateWeekTotal(emp.id, w));
+                monthMap[key] += sum;
+            });
+            const monthLabels = Object.keys(monthMap);
+            const monthData = Object.values(monthMap);
+            renderChart('statsChart5', monthLabels, monthData, 'Gasto mensual');
+        }
+
+        // ================================================================
+        // 6.  MODALES
+        // ================================================================
+
+        function openModal(title, bodyHTML) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').innerHTML = bodyHTML;
+            document.getElementById('modalOverlay').classList.add('open');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('open');
+        }
+
+        // Día modal
+        function openDayModal(employeeId, dayKey) {
+            const emp = STATE.employees.find(e => e.id === employeeId);
+            if (!emp) return;
+            const weekKey = STATE.currentWeekKey || getWeekKey();
+            const data = getEmployeeWeekData(employeeId, weekKey);
+            const entry = data[dayKey] || { type: 'off', hours: 0, amount: 0 };
+
+            const dayName = new Date(dayKey + 'T00:00:00').toLocaleDateString('es', { weekday: 'long', day: 'numeric',
+                month: 'short' });
+
+            const html = `
+                <div style="margin-bottom:12px;"><strong>${emp.name}</strong> — ${dayName}</div>
+                <label>Tipo de jornada</label>
+                <select id="dayTypeSelect" style="width:100%;padding:8px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg2);color:var(--text);">
+                    <option value="off" ${entry.type === 'off' ? 'selected' : ''}>❌ No trabajó</option>
+                    <option value="complete" ${entry.type === 'complete' ? 'selected' : ''}>🟢 Día completo</option>
+                    <option value="half" ${entry.type === 'half' ? 'selected' : ''}>🟡 Media jornada</option>
+                    <option value="hours" ${entry.type === 'hours' ? 'selected' : ''}>🔵 Por horas</option>
+                </select>
+                <div id="hoursContainer" style="${entry.type === 'hours' ? 'display:block;' : 'display:none;'}margin-top:10px;">
+                    <label>Horas trabajadas</label>
+                    <input type="number" id="dayHoursInput" value="${entry.hours || 0}" step="0.5" min="0" max="24" style="width:100%;padding:8px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg2);color:var(--text);" />
+                    <div style="font-size:0.8rem;color:var(--text2);margin-top:4px;">Pago por hora: ${STATE.config.currency}${emp.payHour || 0}</div>
+                </div>
+                <div style="margin-top:12px;font-size:0.9rem;color:var(--text2);">
+                    Total del día: <strong id="dayTotalPreview">${STATE.config.currency}${(entry.amount || 0).toFixed(2)}</strong>
+                </div>
+                <div class="btn-row">
+                    <button class="btn-primary-modal" id="saveDayBtn">💾 Guardar</button>
+                    <button class="btn-secondary-modal" id="cancelDayBtn">Cancelar</button>
+                </div>
+            `;
+
+            openModal(`📅 Registrar jornada — ${emp.name}`, html);
+
+            document.getElementById('dayTypeSelect').addEventListener('change', function() {
+                const show = this.value === 'hours';
+                document.getElementById('hoursContainer').style.display = show ? 'block' : 'none';
+                updateDayPreview();
+            });
+
+            document.getElementById('dayHoursInput').addEventListener('input', updateDayPreview);
+
+            function updateDayPreview() {
+                const type = document.getElementById('dayTypeSelect').value;
+                const hours = parseFloat(document.getElementById('dayHoursInput').value) || 0;
+                let amount = 0;
+                if (type === 'complete') amount = emp.payDay || 0;
+                else if (type === 'half') amount = (emp.payDay || 0) / 2;
+                else if (type === 'hours') amount = (emp.payHour || 0) * hours;
+                document.getElementById('dayTotalPreview').textContent = `${STATE.config.currency}${amount.toFixed(2)}`;
+            }
+
+            document.getElementById('saveDayBtn').addEventListener('click', () => {
+                const type = document.getElementById('dayTypeSelect').value;
+                let hours = 0;
+                if (type === 'hours') {
+                    hours = parseFloat(document.getElementById('dayHoursInput').value) || 0;
+                }
+                const amount = calculateDayAmount(emp, type, hours);
+                const data = getEmployeeWeekData(employeeId, weekKey);
+                data[dayKey] = { type, hours, amount };
+                saveState();
+                closeModal();
+                renderAll();
+                showToast('✅ Jornada registrada correctamente', 'success');
+            });
+
+            document.getElementById('cancelDayBtn').addEventListener('click', closeModal);
+        }
+
+        // Ver empleado
+        function viewEmployee(employeeId) {
+            const emp = STATE.employees.find(e => e.id === employeeId);
+            if (!emp) return;
+            const weekKey = STATE.currentWeekKey || getWeekKey();
+            const data = getEmployeeWeekData(employeeId, weekKey);
+            const days = getWeekDays(weekKey);
+            const total = calculateWeekTotal(employeeId, weekKey);
+            const paid = getEmployeePaid(employeeId);
+            const pending = total - paid;
+
+            let dayList = days.map(d => {
+                const dk = getDayKey(d);
+                const entry = data[dk] || { type: 'off', hours: 0, amount: 0 };
+                const label = entry.type === 'complete' ? '🟢 Completo' :
+                    entry.type === 'half' ? '🟡 Medio' :
+                    entry.type === 'hours' ? `🔵 ${entry.hours}h` :
+                    '❌ No trabajó';
+                return `<div class="day-item"><span>${d.toLocaleDateString('es', { weekday:'short', day:'numeric' })}</span><span>${label} — ${STATE.config.currency}${entry.amount.toFixed(2)}</span></div>`;
+            }).join('');
+
+            const html = `
+                <div class="profile-header">
+                    <div class="big-avatar">${emp.avatar || '👤'}</div>
+                    <div>
+                        <h3 style="margin:0;">${emp.name}</h3>
+                        <div style="color:var(--text2);">${emp.role || 'Sin cargo'} ${emp.phone ? '📞 '+emp.phone : ''}</div>
+                        <span class="status ${emp.status}">${emp.status === 'active' ? '🟢 Activo' : '🔴 Inactivo'}</span>
+                    </div>
+                </div>
+                <div class="profile-detail">
+                    <span><strong>💰 Día completo:</strong> ${STATE.config.currency}${(emp.payDay || 0).toFixed(2)}</span>
+                    <span><strong>🟡 Media:</strong> ${STATE.config.currency}${((emp.payDay || 0)/2).toFixed(2)}</span>
+                    <span><strong>⏱️ Hora:</strong> ${STATE.config.currency}${(emp.payHour || 0).toFixed(2)}</span>
+                </div>
+                <hr style="border-color:var(--border);margin:12px 0;" />
+                <div><strong>📅 Semana actual</strong></div>
+                <div class="day-detail-list">${dayList}</div>
+                <hr style="border-color:var(--border);margin:12px 0;" />
+                <div style="display:flex;gap:16px;flex-wrap:wrap;">
+                    <span><strong>💰 Total ganado:</strong> ${STATE.config.currency}${total.toFixed(2)}</span>
+                    <span><strong>💵 Pagado:</strong> ${STATE.config.currency}${paid.toFixed(2)}</span>
+                    <span><strong>🔴 Pendiente:</strong> ${STATE.config.currency}${pending.toFixed(2)}</span>
+                </div>
+                <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+                    <button class="btn-primary-modal" id="viewPayBtn" style="padding:6px 18px;border:none;border-radius:var(--radius-sm);background:var(--primary);color:#fff;cursor:pointer;">💵 Registrar pago</button>
+                    <button class="btn-secondary-modal" id="viewEditBtn" style="padding:6px 18px;border:none;border-radius:var(--radius-sm);background:var(--bg3);color:var(--text);cursor:pointer;">✏️ Editar</button>
+                    <button class="btn-danger-modal" id="viewToggleBtn" style="padding:6px 18px;border:none;border-radius:var(--radius-sm);background:var(--red);color:#fff;cursor:pointer;">${emp.status === 'active' ? '⏸️ Desactivar' : '▶️ Activar'}</button>
+                </div>
+                ${emp.notes ? `<div style="margin-top:8px;padding:8px 12px;background:var(--bg2);border-radius:var(--radius-sm);"><strong>📝 Notas:</strong> ${emp.notes}</div>` : ''}
+            `;
+
+            openModal(`👤 ${emp.name}`, html);
+
+            document.getElementById('viewPayBtn')?.addEventListener('click', () => { closeModal();
+                openPaymentModal(employeeId); });
+            document.getElementById('viewEditBtn')?.addEventListener('click', () => { closeModal();
+                editEmployee(employeeId); });
+            document.getElementById('viewToggleBtn')?.addEventListener('click', () => { closeModal();
+                toggleEmployeeStatus(employeeId); });
+        }
+
+        // Editar empleado
+        function editEmployee(employeeId) {
+            const emp = STATE.employees.find(e => e.id === employeeId);
+            if (!emp) return;
+
+            const html = `
+                <label>Nombre *</label>
+                <input type="text" id="editName" value="${emp.name}" />
+                <label>Cargo</label>
+                <input type="text" id="editRole" value="${emp.role || ''}" />
+                <label>Teléfono</label>
+                <input type="text" id="editPhone" value="${emp.phone || ''}" />
+                <label>Avatar (inicial)</label>
+                <input type="text" id="editAvatar" value="${emp.avatar || ''}" maxlength="2" style="width:60px;" />
+                <label>Estado</label>
+                <select id="editStatus" style="width:100%;padding:8px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg2);color:var(--text);">
+                    <option value="active" ${emp.status === 'active' ? 'selected' : ''}>Activo</option>
+                    <option value="inactive" ${emp.status === 'inactive' ? 'selected' : ''}>Inactivo</option>
+                </select>
+                <hr style="border-color:var(--border);margin:12px 0;" />
+                <h4>💰 Tarifas</h4>
+                <label>Pago día completo</label>
+                <input type="number" id="editPayDay" value="${emp.payDay || 0}" step="0.01" min="0" />
+                <label>Pago media jornada</label>
+                <input type="number" id="editPayHalf" value="${emp.payHalf || 0}" step="0.01" min="0" />
+                <label>Pago por hora</label>
+                <input type="number" id="editPayHour" value="${emp.payHour || 0}" step="0.01" min="0" />
+                <label>Notas</label>
+                <textarea id="editNotes">${emp.notes || ''}</textarea>
+                <div class="btn-row">
+                    <button class="btn-primary-modal" id="saveEditBtn">💾 Guardar</button>
+                    <button class="btn-secondary-modal" id="cancelEditBtn">Cancelar</button>
+                    <button class="btn-danger-modal" id="deleteEmpBtn" style="margin-left:auto;">🗑️ Eliminar</button>
+                </div>
+            `;
+
+            openModal(`✏️ Editar ${emp.name}`, html);
+
+            document.getElementById('saveEditBtn').addEventListener('click', () => {
+                const name = document.getElementById('editName').value.trim();
+                if (!name) { showToast('⚠️ El nombre es obligatorio', 'error'); return; }
+                emp.name = name;
+                emp.role = document.getElementById('editRole').value.trim();
+                emp.phone = document.getElementById('editPhone').value.trim();
+                emp.avatar = document.getElementById('editAvatar').value.trim() || emp.name[0];
+                emp.status = document.getElementById('editStatus').value;
+                emp.payDay = parseFloat(document.getElementById('editPayDay').value) || 0;
+                emp.payHalf = parseFloat(document.getElementById('editPayHalf').value) || 0;
+                emp.payHour = parseFloat(document.getElementById('editPayHour').value) || 0;
+                emp.notes = document.getElementById('editNotes').value.trim();
+                saveState();
+                closeModal();
+                renderAll();
+                showToast('✅ Empleado actualizado', 'success');
+            });
+
+            document.getElementById('cancelEditBtn').addEventListener('click', closeModal);
+
+            document.getElementById('deleteEmpBtn').addEventListener('click', () => {
+                if (confirm(`¿Seguro que deseas eliminar a ${emp.name}? Esta acción no se puede deshacer.`)) {
+                    STATE.employees = STATE.employees.filter(e => e.id !== employeeId);
+                    saveState();
+                    closeModal();
+                    renderAll();
+                    showToast(`🗑️ ${emp.name} eliminado`, 'warning');
+                }
+            });
+        }
+
+        // Agregar empleado
+        function openAddEmployeeModal() {
+            const html = `
+                <label>Nombre *</label>
+                <input type="text" id="addName" placeholder="Nombre completo" />
+                <label>Cargo</label>
+                <input type="text" id="addRole" placeholder="Ej: Trabajador" />
+                <label>Teléfono</label>
+                <input type="text" id="addPhone" placeholder="+123456789" />
+                <label>Avatar (inicial)</label>
+                <input type="text" id="addAvatar" placeholder="A" maxlength="2" style="width:60px;" />
+                <label>Pago día completo</label>
+                <input type="number" id="addPayDay" value="30" step="0.01" min="0" />
+                <label>Pago media jornada</label>
+                <input type="number" id="addPayHalf" value="15" step="0.01" min="0" />
+                <label>Pago por hora</label>
+                <input type="number" id="addPayHour" value="4" step="0.01" min="0" />
+                <label>Notas</label>
+                <textarea id="addNotes" placeholder="Información adicional..."></textarea>
+                <div class="btn-row">
+                    <button class="btn-primary-modal" id="saveAddBtn">➕ Crear empleado</button>
+                    <button class="btn-secondary-modal" id="cancelAddBtn">Cancelar</button>
+                </div>
+            `;
+
+            openModal('➕ Agregar empleado', html);
+
+            document.getElementById('saveAddBtn').addEventListener('click', () => {
+                const name = document.getElementById('addName').value.trim();
+                if (!name) { showToast('⚠️ El nombre es obligatorio', 'error'); return; }
+                const emp = {
+                    id: 'emp_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+                    name,
+                    role: document.getElementById('addRole').value.trim(),
+                    phone: document.getElementById('addPhone').value.trim(),
+                    avatar: document.getElementById('addAvatar').value.trim() || name[0],
+                    status: 'active',
+                    payDay: parseFloat(document.getElementById('addPayDay').value) || 0,
+                    payHalf: parseFloat(document.getElementById('addPayHalf').value) || 0,
+                    payHour: parseFloat(document.getElementById('addPayHour').value) || 0,
+                    notes: document.getElementById('addNotes').value.trim(),
+                };
+                STATE.employees.push(emp);
+                saveState();
+                closeModal();
+                renderAll();
+                showToast(`✅ ${emp.name} agregado correctamente`, 'success');
+            });
+
+            document.getElementById('cancelAddBtn').addEventListener('click', closeModal);
+        }
+
+        // Pago modal
+        function openPaymentModal(employeeId = null) {
+            const sel = document.getElementById('paymentEmployee');
+            if (employeeId) sel.value = employeeId;
+            const empId = sel.value;
+            if (!empId) { showToast('⚠️ Selecciona un empleado', 'error'); return; }
+            const emp = STATE.employees.find(e => e.id === empId);
+            if (!emp) return;
+
+            const html = `
+                <div style="margin-bottom:12px;">
+                    <strong>${emp.name}</strong> — Semana actual: ${getWeekLabel(STATE.currentWeekKey || getWeekKey())}
+                </div>
+                <label>Cantidad (${STATE.config.currency})</label>
+                <input type="number" id="payAmount" value="0" step="0.01" min="0.01" />
+                <label>Concepto</label>
+                <select id="payConcept" style="width:100%;padding:8px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg2);color:var(--text);">
+                    <option value="Pago semanal">Pago semanal</option>
+                    <option value="Adelanto">Adelanto</option>
+                    <option value="Bonificación">Bonificación</option>
+                    <option value="Otro">Otro</option>
+                </select>
+                <label>Fecha</label>
+                <input type="date" id="payDate" value="${new Date().toISOString().split('T')[0]}" />
+                <label>Notas</label>
+                <input type="text" id="payNote" placeholder="Opcional..." />
+                <div style="margin-top:12px;font-size:0.9rem;color:var(--text2);">
+                    Total ganado: <strong>${STATE.config.currency}${calculateWeekTotal(emp.id, STATE.currentWeekKey || getWeekKey()).toFixed(2)}</strong><br />
+                    Pagado: <strong>${STATE.config.currency}${getEmployeePaid(emp.id).toFixed(2)}</strong><br />
+                    Pendiente: <strong id="payPendingPreview">${STATE.config.currency}${getEmployeePending(emp.id, STATE.currentWeekKey || getWeekKey()).toFixed(2)}</strong>
+                </div>
+                <div class="btn-row">
+                    <button class="btn-primary-modal" id="savePayBtn">💵 Registrar pago</button>
+                    <button class="btn-secondary-modal" id="cancelPayBtn">Cancelar</button>
+                </div>
+            `;
+
+            openModal(`💵 Registrar pago — ${emp.name}`, html);
+
+            document.getElementById('savePayBtn').addEventListener('click', () => {
+                const amount = parseFloat(document.getElementById('payAmount').value);
+                if (!amount || amount <= 0) { showToast('⚠️ Ingresa una cantidad válida', 'error'); return; }
+                const concept = document.getElementById('payConcept').value;
+                const date = document.getElementById('payDate').value;
+                const note = document.getElementById('payNote').value.trim();
+                const weekKey = STATE.currentWeekKey || getWeekKey();
+
+                STATE.payments.push({
+                    employeeId: emp.id,
+                    amount,
+                    date,
+                    concept,
+                    note,
+                    weekKey,
+                    timestamp: Date.now()
+                });
+                saveState();
+                closeModal();
+                renderAll();
+                showToast(`💰 Pago de ${STATE.config.currency}${amount.toFixed(2)} registrado para ${emp.name}`, 'success');
+            });
+
+            document.getElementById('cancelPayBtn').addEventListener('click', closeModal);
+        }
+
+        // ================================================================
+        // 7.  ACCIONES
+        // ================================================================
+
+        function toggleEmployeeStatus(id) {
+            const emp = STATE.employees.find(e => e.id === id);
+            if (!emp) return;
+            emp.status = emp.status === 'active' ? 'inactive' : 'active';
+            saveState();
+            renderAll();
+            showToast(`🔄 ${emp.name} ahora está ${emp.status === 'active' ? 'activo' : 'inactivo'}`, 'info');
+        }
+
+        function closeWeek() {
+            const weekKey = STATE.currentWeekKey || getWeekKey();
+            const active = STATE.employees.filter(e => e.status === 'active');
+            if (active.length === 0) {
+                showToast('⚠️ No hay empleados activos para cerrar la semana', 'error');
+                return;
+            }
+
+            let totalPay = 0,
+                totalPaid = 0,
+                totalPending = 0;
+            const details = active.map(emp => {
+                const total = calculateWeekTotal(emp.id, weekKey);
+                const paid = getEmployeePaid(emp.id);
+                const pending = total - paid;
+                totalPay += total;
+                totalPaid += paid;
+                totalPending += pending;
+                return { name: emp.name, total, paid, pending };
+            });
+
+            let detailHtml = details.map(d =>
+                `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);">
+                    <span>${d.name}</span>
+                    <span>Ganó: $${d.total.toFixed(2)} | Pagado: $${d.paid.toFixed(2)} | Pendiente: $${d.pending.toFixed(2)}</span>
+                </div>`
+            ).join('');
+
+            const html = `
+                <div style="margin-bottom:12px;">
+                    <strong>📅 ${getWeekLabel(weekKey)}</strong>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:0.9rem;">
+                    <div>👥 Empleados: ${active.length}</div>
+                    <div>💰 Total salarios: $${totalPay.toFixed(2)}</div>
+                    <div>💵 Total pagado: $${totalPaid.toFixed(2)}</div>
+                    <div>🔴 Total pendiente: $${totalPending.toFixed(2)}</div>
+                </div>
+                <hr style="border-color:var(--border);margin:12px 0;" />
+                <div style="max-height:200px;overflow-y:auto;font-size:0.85rem;">${detailHtml}</div>
+                <div class="btn-row">
+                    <button class="btn-primary-modal" id="confirmCloseBtn">🔒 Confirmar cierre</button>
+                    <button class="btn-secondary-modal" id="cancelCloseBtn">Cancelar</button>
+                </div>
+            `;
+
+            openModal('🔒 Cerrar semana', html);
+
+            document.getElementById('confirmCloseBtn').addEventListener('click', () => {
+                // Guardar en historial
+                STATE.history.push({
+                    weekKey,
+                    data: {
+                        employees: active.length,
+                        totalPay,
+                        totalPaid,
+                        pending: totalPending,
+                        details: details,
+                    },
+                    timestamp: Date.now()
+                });
+                // Resetear pagos de esta semana? No, dejamos que el usuario maneje.
+                saveState();
+                closeModal();
+                renderAll();
+                showToast('✅ Semana cerrada correctamente', 'success');
+            });
+
+            document.getElementById('cancelCloseBtn').addEventListener('click', closeModal);
+        }
+
+        function copyPreviousWeek() {
+            const currentWeek = STATE.currentWeekKey || getWeekKey();
+            const d = new Date(currentWeek);
+            d.setDate(d.getDate() - 7);
+            const prevWeek = getWeekKey(d);
+
+            if (!STATE.weeks[prevWeek]) {
+                showToast('⚠️ No hay semana anterior para copiar', 'error');
+                return;
+            }
+
+            const active = STATE.employees.filter(e => e.status === 'active');
+            let copied = 0;
+            active.forEach(emp => {
+                const prevData = STATE.weeks[prevWeek]?.[emp.id];
+                if (prevData) {
+                    const currentData = getEmployeeWeekData(emp.id, currentWeek);
+                    Object.keys(prevData).forEach(dk => {
+                        currentData[dk] = { ...prevData[dk] };
+                    });
+                    copied++;
+                }
+            });
+
+            if (copied === 0) {
+                showToast('⚠️ No se pudo copiar ninguna jornada', 'error');
+                return;
+            }
+
+            saveState();
+            renderAll();
+            showToast(`📋 Copiadas ${copied} semanas anteriores`, 'success');
+        }
+
+        function markAllComplete() {
+            const weekKey = STATE.currentWeekKey || getWeekKey();
+            const active = STATE.employees.filter(e => e.status === 'active');
+            let count = 0;
+            active.forEach(emp => {
+                const data = getEmployeeWeekData(emp.id, weekKey);
+                const days = getWeekDays(weekKey);
+                days.forEach(d => {
+                    const dk = getDayKey(d);
+                    const dayOfWeek = d.getDay();
+                    // No marcar domingo si no está habilitado
+                    if (dayOfWeek === 0 && !STATE.config.includeSunday) return;
+                    data[dk] = { type: 'complete', hours: 0, amount: emp.payDay || 0 };
+                });
+                count++;
+            });
+            saveState();
+            renderAll();
+            showToast(`✅ ${count} empleados marcados como día completo`, 'success');
+        }
+
+        // ================================================================
+        // 8.  TOAST
+        // ================================================================
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<span class="toast-icon">${icons[type] || 'ℹ️'}</span> ${message}`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(40px)';
+                setTimeout(() => toast.remove(), 400);
+            }, 3500);
+        }
+
+        // ================================================================
+        // 9.  EXPORT / IMPORT
+        // ================================================================
+
+        function exportJSON() {
+            const data = {
+                employees: STATE.employees,
+                weeks: STATE.weeks,
+                payments: STATE.payments,
+                history: STATE.history,
+                config: STATE.config,
+                exportedAt: new Date().toISOString()
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `respaldo_ivan_${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('💾 Respaldo exportado', 'success');
+        }
+
+        function importJSON(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (!data.employees || !data.weeks) {
+                        showToast('⚠️ Archivo inválido', 'error');
+                        return;
+                    }
+                    if (!confirm('¿Reemplazar todos los datos actuales con el respaldo?')) return;
+                    STATE.employees = data.employees;
+                    STATE.weeks = data.weeks;
+                    STATE.payments = data.payments || [];
+                    STATE.history = data.history || [];
+                    if (data.config) STATE.config = { ...STATE.config, ...data.config };
+                    saveState();
+                    renderAll();
+                    showToast('📥 Respaldo importado correctamente', 'success');
+                } catch (err) {
+                    showToast('⚠️ Error al leer el archivo', 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // ================================================================
+        // 10. RENDER ALL
+        // ================================================================
+
+        function renderAll() {
+            renderDashboard();
+            renderEmployees();
+            renderWeek();
+            renderPayments();
+            renderHistory();
+            renderStats();
+
+            // Actualizar select de empleados en pagos
+            updatePaymentsSelect();
+
+            // Aplicar tema
+            applyTheme();
+        }
+
+        // ================================================================
+        // 11. TEMA
+        // ================================================================
+
+        function applyTheme() {
+            const isDark = STATE.config.theme !== 'light';
+            document.documentElement.classList.toggle('light-mode', !isDark);
+            document.getElementById('themeToggle').textContent = isDark ? '🌙' : '☀️';
+            // Actualizar gráficos
+            setTimeout(() => {
+                renderDashCharts();
+                renderStats();
+            }, 100);
+        }
+
+        function toggleTheme() {
+            STATE.config.theme = STATE.config.theme === 'dark' ? 'light' : 'dark';
+            saveState();
+            applyTheme();
+            renderAll();
+        }
+
+        // ================================================================
+        // 12. NAVEGACIÓN
+        // ================================================================
+
+        function navigateTo(section) {
+            document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+            document.getElementById(`section-${section}`).classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            document.querySelector(`.nav-btn[data-section="${section}"]`)?.classList.add('active');
+
+            const titles = {
+                dashboard: '📊 Dashboard',
+                employees: '👥 Empleados',
+                week: '📅 Semana actual',
+                payments: '💵 Pagos',
+                stats: '📊 Estadísticas',
+                history: '📚 Historial',
+                config: '⚙️ Configuración'
+            };
+            document.getElementById('pageTitle').innerHTML = `${titles[section] || 'Dashboard'} <small>${section === 'dashboard' ? 'Resumen general' : ''}</small>`;
+
+            if (section === 'dashboard') renderDashboard();
+            if (section === 'employees') renderEmployees();
+            if (section === 'week') renderWeek();
+            if (section === 'payments') renderPayments();
+            if (section === 'stats') renderStats();
+            if (section === 'history') renderHistory();
+        }
+
+        // ================================================================
+        // 13. INICIALIZACIÓN
+        // ================================================================
+
+        function init() {
+            loadState();
+            initEmployees();
+
+            // Semana actual
+            STATE.currentWeekKey = getWeekKey();
+
+            // Render inicial
+            renderAll();
+
+            // Navegación
+            document.querySelectorAll('.nav-btn[data-section]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    navigateTo(btn.dataset.section);
+                });
+            });
+
+            // Topbar acciones
+            document.getElementById('addEmployeeBtn').addEventListener('click', openAddEmployeeModal);
+            document.getElementById('addEmployeeQuick').addEventListener('click', openAddEmployeeModal);
+            document.getElementById('closeWeekBtn').addEventListener('click', closeWeek);
+
+            // Semana navegación
+            document.getElementById('weekPrev').addEventListener('click', () => {
+                const d = new Date(STATE.currentWeekKey);
+                d.setDate(d.getDate() - 7);
+                STATE.currentWeekKey = getWeekKey(d);
+                renderAll();
+                navigateTo('week');
+            });
+            document.getElementById('weekNext').addEventListener('click', () => {
+                const d = new Date(STATE.currentWeekKey);
+                d.setDate(d.getDate() + 7);
+                STATE.currentWeekKey = getWeekKey(d);
+                renderAll();
+                navigateTo('week');
+            });
+            document.getElementById('weekToday').addEventListener('click', () => {
+                STATE.currentWeekKey = getWeekKey();
+                renderAll();
+                navigateTo('week');
+            });
+            document.getElementById('copyWeekBtn').addEventListener('click', copyPreviousWeek);
+            document.getElementById('markAllComplete').addEventListener('click', markAllComplete);
+
+            // Filtros empleados
+            document.querySelectorAll('.filter-btn[data-filter]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn[data-filter]').forEach(b => b.classList.remove(
+                    'active'));
+                    btn.classList.add('active');
+                    STATE.filter = btn.dataset.filter;
+                    renderEmployees();
+                });
+            });
+
+            // Filtros estadísticas
+            document.querySelectorAll('.filter-btn[data-stats]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn[data-stats]').forEach(b => b.classList.remove(
+                    'active'));
+                    btn.classList.add('active');
+                    STATE.statsFilter = btn.dataset.stats;
+                    renderStats();
+                });
+            });
+
+            // Búsqueda
+            document.getElementById('searchEmployee').addEventListener('input', (e) => {
+                STATE.searchQuery = e.target.value;
+                renderEmployees();
+            });
+
+            // Tema
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+            // Modal
+            document.getElementById('modalClose').addEventListener('click', closeModal);
+            document.getElementById('modalOverlay').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) closeModal();
+            });
+
+            // Pagos
+            document.getElementById('registerPaymentBtn').addEventListener('click', () => {
+                const empId = document.getElementById('paymentEmployee').value;
+                if (!empId) { showToast('⚠️ Selecciona un empleado', 'error'); return; }
+                openPaymentModal(empId);
+            });
+
+            // Export / Import
+            document.getElementById('exportJSON').addEventListener('click', exportJSON);
+            document.getElementById('importJSON').addEventListener('click', () => {
+                document.getElementById('importFile').click();
+            });
+            document.getElementById('importFile').addEventListener('change', (e) => {
+                if (e.target.files[0]) importJSON(e.target.files[0]);
+                e.target.value = '';
+            });
+
+            // Backup
+            document.getElementById('backupExport').addEventListener('click', exportJSON);
+            document.getElementById('backupImport').addEventListener('click', () => {
+                document.getElementById('backupFile').click();
+            });
+            document.getElementById('backupFile').addEventListener('change', (e) => {
+                if (e.target.files[0]) importJSON(e.target.files[0]);
+                e.target.value = '';
+            });
+
+            // Configuración
+            document.getElementById('saveConfigBtn').addEventListener('click', () => {
+                STATE.config.businessName = document.getElementById('configBusinessName').value || 'Mi Negocio';
+                STATE.config.adminName = document.getElementById('configAdminName').value || 'Administrador';
+                STATE.config.currency = document.getElementById('configCurrency').value || '$';
+                STATE.config.weekStart = document.getElementById('configWeekStart').value || 'Lunes';
+                STATE.config.weekEnd = document.getElementById('configWeekEnd').value || 'Sábado';
+                STATE.config.includeSunday = document.getElementById('configSunday').checked;
+                STATE.config.pin = document.getElementById('configPin').value || '';
+                saveState();
+                renderAll();
+                showToast('⚙️ Configuración guardada', 'success');
+            });
+
+            // Cargar config en formulario
+            document.getElementById('configBusinessName').value = STATE.config.businessName || '';
+            document.getElementById('configAdminName').value = STATE.config.adminName || '';
+            document.getElementById('configCurrency').value = STATE.config.currency || '$';
+            document.getElementById('configWeekStart').value = STATE.config.weekStart || 'Lunes';
+            document.getElementById('configWeekEnd').value = STATE.config.weekEnd || 'Sábado';
+            document.getElementById('configSunday').checked = STATE.config.includeSunday || false;
+            document.getElementById('configPin').value = STATE.config.pin || '';
+
+            // Exportar PDF/Excel/CSV (simplificado)
+            document.getElementById('exportPDF').addEventListener('click', () => {
+                showToast('📄 Exportando PDF... (demo)', 'info');
+                // Aquí se podría integrar una librería como jsPDF
+            });
+            document.getElementById('exportExcel').addEventListener('click', () => {
+                showToast('📊 Exportando Excel... (demo)', 'info');
+            });
+            document.getElementById('exportCSV').addEventListener('click', () => {
+                showToast('📋 Exportando CSV... (demo)', 'info');
+            });
+
+            // Instalación PWA
+            let deferredPrompt;
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                document.getElementById('installBtn').style.display = 'inline-block';
+            });
+            document.getElementById('installBtn').addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const result = await deferredPrompt.userChoice;
+                    if (result.outcome === 'accepted') {
+                        showToast('📲 App instalada correctamente', 'success');
+                    }
+                    deferredPrompt = null;
+                    document.getElementById('installBtn').style.display = 'none';
+                }
+            });
+
+            // Teclado: ESC para cerrar modal
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeModal();
+            });
+
+            // Guardar estado al cerrar
+            window.addEventListener('beforeunload', saveState);
+
+            console.log('💰 IVAN MARÍNEZ — Control Financiero de Empleados');
+            console.log('✅ Sistema listo');
+        }
+
+        // ================================================================
+        // 14. ARRANQUE
+        // ================================================================
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+
+</body>
+</html>
